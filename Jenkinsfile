@@ -4,10 +4,9 @@ pipeline {
     stages {
         stage('Clone Repo') {
             steps {
-                git 'https://github.com/Akshith2623/jenkins-ci-cd-task.git'
+                git branch: 'main', url: 'https://github.com/Akshith2623/jenkins-ci-cd-task.git'
             }
         }
-
         stage('Build Docker Image') {
             steps {
                 script {
@@ -15,11 +14,11 @@ pipeline {
                 }
             }
         }
-
         stage('Run Docker Container') {
             steps {
                 script {
-                    dockerImage.run("-d -p 3000:3000")
+                    sh 'docker rm -f ci-cd-demo-app || true'
+                    sh 'docker run -d --name ci-cd-demo-app -p 3000:3000 ci-cd-demo-app'
                 }
             }
         }
